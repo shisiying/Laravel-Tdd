@@ -20,7 +20,7 @@ class CreateThreadTest extends TestCase
         // Given we have a signed in user
         $this->signIn();
         // When we hit the endpoint to cteate a new thread
-        $thread = make('App\Thread');
+        $thread = create('App\Thread');
         $this->post('/threads',$thread->toArray());
 
         // Then,when we visit the thread
@@ -36,20 +36,13 @@ class CreateThreadTest extends TestCase
 
     public function guests_may_not_create_threads()
     {
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withExceptionHandling();
 
-        $thread = make('App\Thread');
-        $this->post('/threads',$thread->toArray());
-    }
+//        $this->get('/threads/create')
+//            ->assertRedirect('/login');
 
-    /**
-     * @test
-     */
-
-    public function guests_may_not_see_the_create_thread_page()
-    {
-
-        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('login');
+        $this->post('/threads')
+            ->assertRedirect('/login');
     }
 
 }
