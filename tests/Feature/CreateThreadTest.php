@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+
 class CreateThreadTest extends TestCase
 {
     use DatabaseMigrations;
@@ -17,10 +18,9 @@ class CreateThreadTest extends TestCase
     public function an_authenticated_user_can_create_new_forum_thread()
     {
         // Given we have a signed in user
-        $this->actingAs(factory('App\User')->create());  // 已登录用户
-
+        $this->signIn();
         // When we hit the endpoint to cteate a new thread
-        $thread = factory('App\Thread')->make();
+        $thread = make('App\Thread');
         $this->post('/threads',$thread->toArray());
 
         // Then,when we visit the thread
@@ -38,7 +38,7 @@ class CreateThreadTest extends TestCase
     {
         $this->expectException('Illuminate\Auth\AuthenticationException');
 
-        $thread = factory('App\Thread')->make();
+        $thread = make('App\Thread');
         $this->post('/threads',$thread->toArray());
     }
 
