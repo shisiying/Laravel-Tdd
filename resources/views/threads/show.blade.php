@@ -58,6 +58,16 @@
             @else
             <p class="text-center">请先<a href="{{ route('login') }}">登录</a>，然后再发表回复 </p>
         @endif
-
     </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>
+                    <a href="#">{{ $thread->creator->name }}</a> 发布于 {{ $thread->created_at->diffForHumans() }},
+                    当前共有 {{ $thread->replies()->count() }} 个回复。
+                </p>
+            </div>
+        </div>
+    </div>
+
 @endsection
