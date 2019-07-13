@@ -6,6 +6,7 @@ use App\Channel;
 use App\Filters\ThreadsFilters;
 use App\Thread;
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
@@ -33,7 +34,7 @@ class ThreadsController extends Controller
 
     protected function getThreads(Channel $channel,ThreadsFilters $filters)
     {
-        $threads = Thread::with('channel')->latest()->filter($filters);
+        $threads = Thread::latest()->filter($filters);
 
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
@@ -119,8 +120,16 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel,Thread $thread)
     {
-        //
+        $this->authorize('update',$thread);
+
+        $thread->delete();
+
+        if(request()->wantsJson()){
+            return response([],204);
+        }
+
+        return redirect('/threads');
     }
 }

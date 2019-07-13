@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
 //        \View::share('channels',\App\Channel::all());
 
         //视图合成器
-        \View::composer('*', function ($view) {
-            $view->with("channels", Channel::query());
+        \View::composer('*', function ($view)  {
+            $view->with("channels", \App\Channel::all());
         });
     }
 
